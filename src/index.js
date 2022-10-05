@@ -1,10 +1,15 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './app/store';
-import App from './App';
+import { store } from './redux/store';
+import Home from './pages/Home/Home';
+import Profile from './pages/Profile/Profile';
+import Login from './pages/Login/Login';
+import Transactions from './pages/Transactions/Transactions';
+import Error from './pages/Error/Error';
 import reportWebVitals from './reportWebVitals';
-import './index.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './style/index.scss';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -12,7 +17,16 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/error" element={<Error />} />
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </Router>
     </Provider>
   </React.StrictMode>
 );
