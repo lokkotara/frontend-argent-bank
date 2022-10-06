@@ -5,14 +5,16 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetcherPostWithToken } from "../../services/fetcher";
-import { getInfos, getUsername } from "../../features/User/userSlice";
+import { getInfos, getLastName, getFirstName } from "../../features/User/userSlice";
 import { getToken } from "../../features/Login/loginSlice";
 import { useEffect } from "react";
 
 export default function Profile() {
   const dispatch    = useDispatch();
-  const isUser      = useSelector(getUsername);
+  const isUser      = useSelector(getFirstName);
   const navigate    = useNavigate();
+  const firstName    = useSelector(getFirstName);
+  const lastName    = useSelector(getLastName);
   const token       = useSelector(getToken);
 
   const getProfile = async () => {
@@ -29,7 +31,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (token === null) navigate("/login");
-    if (isUser === "") getProfile();
+    if (token !== null && isUser === "") getProfile();
   });
 
   return (
@@ -40,7 +42,7 @@ export default function Profile() {
           <h1>
             Welcome back
             <br />
-            Tony Jarvis!
+            {firstName} {lastName}!
           </h1>
           <button className="edit-button">Edit Name</button>
         </div>

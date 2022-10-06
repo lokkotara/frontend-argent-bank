@@ -26,11 +26,22 @@ export const userSlice = createSlice({
         draft.updatedAt   = action.payload.data.body.updatedAt;
       },
     },
+    resetInfos: {
+      reducer: (draft) => {
+        draft.createdAt   = "";
+        draft.email       = "";
+        draft.firstName   = "";
+        draft.id          = "";
+        draft.lastName    = "";
+        draft.updatedAt   = "";
+      },
+    },
   },
 });
 
-export const getUsername = (state) => state.user.firstName;
+export const getLastName = (state) => state.user.lastName;
+export const getFirstName = (state) => state.user.firstName;
 
-export const { getInfos } = userSlice.actions;
+export const { getInfos, resetInfos } = userSlice.actions;
 
 export default userSlice.reducer;

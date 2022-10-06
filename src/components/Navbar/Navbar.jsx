@@ -1,6 +1,6 @@
 import "./Navbar.scss";
 import { getToken, logout } from "../../features/Login/loginSlice";
-import { getUsername } from "../../features/User/userSlice";
+import { getFirstName,resetInfos } from "../../features/User/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -8,11 +8,12 @@ export default function Navbar() {
   const dispatch    = useDispatch();
   const isToken     = useSelector(getToken);
   const navigate    = useNavigate();
-  const username    = useSelector(getUsername);
+  const firstName    = useSelector(getFirstName);
 
   const handleAuthentication = (e) => {
     e.preventDefault();
     dispatch(logout());
+    dispatch(resetInfos());
     navigate("/");
   };
 
@@ -21,7 +22,7 @@ export default function Navbar() {
       <div>
         <Link className="main-nav-item" to={`/profile`}>
           <i className="fa fa-user-circle"></i>
-          {username}
+          {firstName}
         </Link>
         <Link className="main-nav-item" onClick={handleAuthentication}>
           <i className="fa fa-sign-out"></i>
