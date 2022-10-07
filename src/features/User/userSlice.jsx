@@ -26,6 +26,16 @@ export const userSlice = createSlice({
         draft.updatedAt   = action.payload.data.body.updatedAt;
       },
     },
+    updateInfos: {
+      prepare: (data) => ({
+        payload: { data },
+      }),
+      reducer: (draft, action) => {
+        draft.firstName   = action.payload.data.firstName;
+        draft.lastName    = action.payload.data.lastName;
+        draft.updatedAt   = action.payload.data.updatedAt;
+      },
+    },
     resetInfos: {
       reducer: (draft) => {
         draft.createdAt   = "";
@@ -42,6 +52,6 @@ export const userSlice = createSlice({
 export const getLastName = (state) => state.user.lastName;
 export const getFirstName = (state) => state.user.firstName;
 
-export const { getInfos, resetInfos } = userSlice.actions;
+export const { getInfos, resetInfos, updateInfos } = userSlice.actions;
 
 export default userSlice.reducer;
