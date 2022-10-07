@@ -5,17 +5,24 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetcherPostWithToken } from "../../services/fetcher";
-import { getInfos, getLastName, getFirstName } from "../../features/User/userSlice";
+import {
+  getInfos,
+  getLastName,
+  getFirstName,
+} from "../../features/User/userSlice";
 import { getToken } from "../../features/Login/loginSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
-  const dispatch    = useDispatch();
-  const isUser      = useSelector(getFirstName);
-  const navigate    = useNavigate();
-  const firstName    = useSelector(getFirstName);
-  const lastName    = useSelector(getLastName);
-  const token       = useSelector(getToken);
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useDispatch();
+  const isUser = useSelector(getFirstName);
+  const navigate = useNavigate();
+  const firstName = useSelector(getFirstName);
+  const lastName = useSelector(getLastName);
+  const token = useSelector(getToken);
 
   const getProfile = async () => {
     if (isUser === "") {
@@ -25,9 +32,62 @@ export default function Profile() {
         token
       );
       const data = await response.json();
-      dispatch(getInfos(data));
+      await dispatchUserInfos(data);
     }
   };
+
+  const dispatchUserInfos = async (data) => {
+    await dispatch(getInfos(data));
+  };
+
+  const toggleButton = () => setIsEditing(!isEditing);
+
+  const buttonOpen = () => {
+    return (
+      <React.Fragment>
+        <h1>Welcome back</h1>
+        <div className="edit-form">
+          <div className="row">
+            <input
+              type="text"
+              placeholder={firstName}
+              value={newFirstName}
+              onChange={(e) => setNewFirstName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder={lastName}
+              value={newLastName}
+              onChange={(e) => setNewLastName(e.target.value)}
+            />
+          </div>
+          <div className="row">
+            <button onClick={submitForm}>Save</button>
+            <button onClick={toggleButton}>Cancel</button>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  };
+
+  const buttonClose = () => {
+    return (
+      <React.Fragment>
+        <h1>
+          Welcome back
+          <br />
+          {firstName} {lastName}!
+        </h1>
+        <button className="edit-button" onClick={toggleButton}>
+          Edit Name
+        </button>
+      </React.Fragment>
+    );
+  };
+
+  const submitForm = () => {
+    console.log(newFirstName, newLastName);
+  }
 
   useEffect(() => {
     if (token === null) navigate("/login");
@@ -39,12 +99,7 @@ export default function Profile() {
       <Navbar />
       <main className="main bg-dark">
         <div className="header">
-          <h1>
-            Welcome back
-            <br />
-            {firstName} {lastName}!
-          </h1>
-          <button className="edit-button">Edit Name</button>
+          {isEditing ? buttonOpen() : buttonClose()}
         </div>
         <h2 className="sr-only">Accounts</h2>
         <section className="account">

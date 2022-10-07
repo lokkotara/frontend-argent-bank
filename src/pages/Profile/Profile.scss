@@ -1,0 +1,29 @@
+.edit-button, .transaction-button {
+  cursor: pointer;
+}
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 1rem;
+  align-items: center;
+  margin-bottom: 34px;
+  .row {
+    display: flex;
+    column-gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    width: 50vw;
+    >input {
+      flex: 1;
+      max-width: 10rem;
+      height: 2rem;
+      border-radius: 5px;
+
+    }
+    >button {
+      flex: 1;
+      max-width: 5rem;
+    }
+  }
+}
