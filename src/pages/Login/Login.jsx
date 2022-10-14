@@ -8,11 +8,11 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [password, setPassword]   = useState("");
-  const [username, setUsername]   = useState("");
-  const [isRemembered, setIsRemembered] = useState(false);
-  const dispatch                  = useDispatch();
-  const navigate                  = useNavigate();
+  const [isRemembered, setIsRemembered]   = useState(false);
+  const [password, setPassword]           = useState("");
+  const [username, setUsername]           = useState("");
+  const dispatch                          = useDispatch();
+  const navigate                          = useNavigate();
   
   const handleDefaultChecked = () => {
     const isSaved = localStorage.getItem("username") ? true : false;
@@ -34,7 +34,6 @@ export default function Login() {
     );
     const data = await response.json();
     dispatch(login(data));
-    // sessionStorage.setItem("token",data.body.token);
     navigate("/profile");
   };
 

@@ -1,22 +1,18 @@
-import React,{useEffect} from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import Footer from "../../components/Footer/Footer";
-import { useNavigate } from "react-router-dom";
 import "./Transactions.scss";
-import { useSelector } from "react-redux";
+import Footer from "../../components/Footer/Footer";
+import Navbar from "../../components/Navbar/Navbar";
+import React,{useEffect} from "react";
 import { getToken } from "../../features/Login/loginSlice";
-
-
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Transactions() {
 
   const token = useSelector(getToken);
-  // const isTokenStored = sessionStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token === null)navigate("/login");
-    // if (token === null && isTokenStored === null)navigate("/login");
   });
 
   return (
