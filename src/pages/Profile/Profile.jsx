@@ -4,11 +4,12 @@ import Navbar from "../../components/Navbar/Navbar";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetcherPostWithToken } from "../../services/fetcher";
+import { fetcherWithToken } from "../../services/fetcher";
 import {
   getInfos,
   getLastName,
   getFirstName,
+  updateInfos,
 } from "../../features/User/userSlice";
 import { getToken } from "../../features/Login/loginSlice";
 import { useEffect, useState } from "react";
@@ -26,8 +27,8 @@ export default function Profile() {
 
   const getProfile = async () => {
     if (isUser === "") {
-      const response = await fetcherPostWithToken(
-        "http://localhost:3001/api/v1/user/profile",
+      const response = await fetcherWithToken(
+        "http://localhost:3001/api/v1/user/profile","POST",
         {},
         token
       );
@@ -85,9 +86,22 @@ export default function Profile() {
     );
   };
 
-  const submitForm = () => {
-    console.log(newFirstName, newLastName);
-  }
+  const submitForm = async () => {
+    if (newFirstName !== "" && newLastName !== "") {
+      const response = await fetcherWithToken(
+        "http://localhost:3001/api/v1/user/profile","PUT",
+        {firstName: newFirstName, lastName: newLastName},
+        token
+      );
+      const data = await response.json();
+      if(data.status === 200){
+        dispatch(updateInfos({firstName: data.body.firstName, lastName: data.body.lastName, updatedAt: data.body.updatedAt}));
+        toggleButton();
+        setNewFirstName("");
+        setNewLastName("");
+      }
+    }
+  };
 
   useEffect(() => {
     if (token === null) navigate("/login");

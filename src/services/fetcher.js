@@ -11,9 +11,9 @@ export const fetcherPost = async (url,body) => {
       body      : JSON.stringify(body),
     })
 };
-export const fetcherPostWithToken = async (url, body, token) => {
+export const fetcherWithToken = async (url,type, body, token) => {
   return await fetch(url, {
-    method: "POST",
+    method: type,
     headers: {
       Accept            : "application/json",
       "Content-Type"    : "application/json",
