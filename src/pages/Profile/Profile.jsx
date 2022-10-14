@@ -23,7 +23,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const firstName = useSelector(getFirstName);
   const lastName = useSelector(getLastName);
-  // const isTokenStored = sessionStorage.getItem("token");
   const token = useSelector(getToken);
 
   const getProfile = async () => {
@@ -106,7 +105,6 @@ export default function Profile() {
 
   useEffect(() => {
     if (token === null) navigate("/login");
-    // if (token === null && isTokenStored === null) navigate("/login");
     if (token !== null && isUser === "") getProfile();
   });
 
