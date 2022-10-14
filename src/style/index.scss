@@ -277,6 +277,13 @@ body {
   background-color: #00bc77;
   color: #fff;
 }
+.transaction-button-inverse {
+  padding: 10px;
+  border-radius: 5px;
+  color: #00bc77;
+  background-color: #fff;
+  border-color: #00bc77;
+}
 
 @media (min-width: 720px) {
   .account {

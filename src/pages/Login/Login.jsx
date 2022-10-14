@@ -34,6 +34,7 @@ export default function Login() {
     );
     const data = await response.json();
     dispatch(login(data));
+    // sessionStorage.setItem("token",data.body.token);
     navigate("/profile");
   };
 

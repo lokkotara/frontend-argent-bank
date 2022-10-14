@@ -6,14 +6,16 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const dispatch    = useDispatch();
+  // const isTokenStored = sessionStorage.getItem("token");
   const isToken     = useSelector(getToken);
   const navigate    = useNavigate();
-  const firstName    = useSelector(getFirstName);
+  const firstName   = useSelector(getFirstName);
 
   const handleAuthentication = (e) => {
     e.preventDefault();
     dispatch(logout());
     dispatch(resetInfos());
+    // sessionStorage.clear();
     navigate("/");
   };
 
@@ -50,6 +52,7 @@ export default function Navbar() {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
+      {/* {isToken||isTokenStored ? templateSignOut() : templateSignIn()} */}
       {isToken ? templateSignOut() : templateSignIn()}
     </nav>
   );
