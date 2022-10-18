@@ -49,9 +49,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const getLastName = (state) => state.user.lastName;
-export const getFirstName = (state) => state.user.firstName;
-
 export const { getInfos, resetInfos, updateInfos } = userSlice.actions;
 
 export default userSlice.reducer;

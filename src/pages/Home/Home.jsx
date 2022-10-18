@@ -1,7 +1,7 @@
-import React from "react";
+import "./Home.scss";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
-import "./Home.scss";
+import React from "react";
 
 export default function Home() {
   return (

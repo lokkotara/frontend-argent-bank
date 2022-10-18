@@ -1,0 +1,422 @@
+swagger: "2.0"
+info:
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
+  version: "1.0.0"
+  termsOfService: "http://swagger.io/terms/"
+host: localhost:3001
+basePath: /api/v1
+schemes:
+  - http
+paths:
+  /user/login:
+    post:
+      tags:
+        - User Module
+      summary: Login
+      description: API for Login
+      parameters:
+        - in: body
+          name: body
+          description: Login Payload
+          required: true
+          schema:
+            $ref: "#/definitions/Login"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Login Successfully
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /user/signup:
+    post:
+      tags:
+        - User Module
+      summary: Signup
+      description: API for Signup
+      parameters:
+        - in: body
+          name: body
+          description: Signup Payload
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Signup Successfully
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /user/profile:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for fetching a user profile
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User profile retrieved successully
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for updating a user profile
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Update user profile attributes
+          required: true
+          schema:
+            $ref: "#/definitions/UserProfile"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User profile retrieved successully
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Account
+      summary: Accounts Resume
+      description: API for fetching all accounts of a connected user
+      parameters:
+        - in: header
+          name: Authorization
+          type: string
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Accounts retrieved successully
+          schema:
+            $ref: "#/definitions/Accounts"
+        "400":
+          description: No account found
+        "500":
+          description: Internal Server Error
+  /account/{idAccount}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Account
+      summary: Account Overview
+      description: API for fetching all transactions on a specific account
+      parameters:
+        - in: path
+          name: idAccount
+          type: string
+          required: true
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Account retrieved successully
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  accountName:
+                      type: string
+                      example: 'Argent Bank Checking'
+                      description: Chosen name of the bank account
+                  accountNumber:
+                    type: integer
+                    example: 1234 1253 8349
+                    description: Number of the bank account
+                  accountBalance:
+                    type: number
+                    example: 2082.79
+                    description: Amount of the bank account
+                  accountId:
+                    type: string
+                    example: '12vxh59ybbDcgf9'
+                    description: Identifier for the bank account
+              - $ref: "#/definitions/Transactions"
+        "404":
+          description: Account not found
+        "500":
+          description: Internal Server Error
+  /account/{idAccount}/transaction/{idTransaction}:
+      post:
+        security:
+          - Bearer: []
+        tags:
+          - Account
+        summary: Add Infos
+        description: API for adding infos on a specific transaction
+        parameters:
+          - in: path
+            type: string
+            required: true
+            name: idAccount
+          - in: path
+            type: string
+            required: true
+            name: idTransaction
+          - in: header
+            type: string
+            name: Authorization
+            description: Attach Bearer JWT token
+            required: true
+          - in: body
+            name: body
+            description: add a type, a category or a note to a specific transaction
+            schema:
+              $ref: "#/definitions/ModifiableTransaction"
+        produces:
+          - application/json
+        responses:
+          "201":
+            description: Infos successully added to the transaction
+            schema:
+              $ref: "#/definitions/ApiResponseDefault"
+          "400":
+            description: Invalid Fields
+          "500":
+            description: Internal Server Error
+      put:
+        security:
+          - Bearer: []
+        tags:
+          - Account
+        summary: Modify Infos
+        description: API for updating infos on a specific transaction
+        parameters:
+          - in: path
+            type: string
+            required: true
+            name: idAccount
+          - in: path
+            type: string
+            required: true
+            name: idTransaction
+          - in: header
+            type: string
+            name: Authorization
+            description: Attach Bearer JWT token
+            required: true
+          - in: body
+            name: body
+            description: Update infos on a specific transaction
+            required: true
+            schema:
+              $ref: "#/definitions/ModifiableTransaction"
+        produces:
+          - application/json
+        responses:
+          "200":
+            description: Infos successfully updated
+            schema:
+              $ref: "#/definitions/ApiResponseDefault"
+          "400":
+            description: Invalid Fields
+          "500":
+            description: Internal Server Error
+      delete:
+        security:
+          - Bearer: []
+        tags:
+          - Account
+        summary: Delete Infos
+        description: API for deleting infos relative to a transaction
+        parameters:
+          - in: path
+            type: string
+            required: true
+            name: idAccount
+          - in: path
+            type: string
+            required: true
+            name: idTransaction
+          - in: header
+            type: string
+            name: Authorization
+            description: Attach Bearer JWT token
+            required: true
+          - in: body
+            name: body
+            description: delete infos on a specific transaction
+            schema:
+              $ref: "#/definitions/ModifiableTransaction"
+        produces:
+          - application/json
+        responses:
+          "200":
+            description: User profile retrieved successully
+            schema:
+              $ref: "#/definitions/ApiResponse"
+          "400":
+            description: Invalid Fields
+          "500":
+            description: Internal Server Error
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  User:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+      firstName:
+        type: string
+        description: user first name
+      lastName:
+        type: string
+        description: user last name
+  Login:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+  ApiResponseDefault:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+  UserProfile:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+  Account:
+    type: object
+    properties:
+      accountName:
+        type: string
+        example: 'Argent Bank Checking'
+        description: Chosen name of the bank account
+      accountNumber:
+        type: integer
+        example: 1234 1253 8349
+        description: Number of the bank account
+      accountBalance:
+        type: number
+        example: 2082.79
+        description: Amount of the bank account
+      accountId:
+        type: string
+        example: '12vxh59ybbDcgf9'
+        description: Identifier for the bank account
+  Accounts:
+    type: array
+    items:
+      $ref: '#/definitions/Account'
+  ModifiableTransaction:
+    type: object
+    properties:
+      transactionCategory:
+        type: string
+        example: 'Food'
+        description: Category of the transaction
+      transactionNotes:
+        type: string
+        example: 'Yummy pastries for my birthday'
+        description: Additional note for the transaction
+  Transaction:
+    allOf:
+      - $ref: '#/definitions/ModifiableTransaction'
+      - type: object
+        properties:
+          transactionType:
+            type: string
+            example: 'Electronic'
+            description: Type of transaction
+          transactionDate:
+            type: string
+            example: '2020-06-20'
+            description: Date of the transaction
+          transactionDescription:
+            type: string
+            example: 'Gold Sun Bakery'
+            description: Description of the transaction
+          transactionAmount:
+            type: number
+            example: 5.00
+            description: Value of the transaction
+  Transactions:
+    type: array
+    items:
+      $ref: '#/definitions/Transaction'
+      
+      

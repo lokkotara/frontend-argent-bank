@@ -1,6 +1,18 @@
 .edit-button, .transaction-button {
   cursor: pointer;
 }
+
+.edit-button:hover, .transaction-button:hover{
+  background-color: #fff;
+  border-color: #00bc77;
+  color: #00bc77;
+  transition: all 0.2s ease-in-out;
+}
+
+.alternateTitle {
+  margin-bottom: 3px;
+}
+
 .edit-form {
   display: flex;
   flex-direction: column;
@@ -19,11 +31,17 @@
       max-width: 10rem;
       height: 2rem;
       border-radius: 5px;
-
+      padding-left: 0.5rem;
     }
     >button {
       flex: 1;
       max-width: 5rem;
+    }
+    .transaction-button-inverse:hover {
+      background-color: #00bc77;
+      color: #fff;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
     }
   }
 }

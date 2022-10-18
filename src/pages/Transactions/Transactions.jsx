@@ -1,18 +1,17 @@
 import "./Transactions.scss";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
-import React,{useEffect} from "react";
-import { getToken } from "../../features/Login/loginSlice";
+import React, { useEffect } from "react";
+import { getToken } from "../../features/Login/loginSelector";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function Transactions() {
-
   const token = useSelector(getToken);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token === null)navigate("/login");
+    if (token === null) navigate("/login");
   });
 
   return (

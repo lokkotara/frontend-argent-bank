@@ -1,22 +1,32 @@
 import "./Navbar.scss";
-import { getToken, logout } from "../../features/Login/loginSlice";
-import { getFirstName,resetInfos } from "../../features/User/userSlice";
-import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { getFirstName } from "../../features/User/userSelector";
+import { getToken} from "../../features/Login/loginSelector";
+import { logout } from "../../features/Login/loginSlice";
+import { resetInfos } from "../../features/User/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Navbar() {
-  const dispatch    = useDispatch();
-  const isToken     = useSelector(getToken);
-  const navigate    = useNavigate();
-  const firstName   = useSelector(getFirstName);
+  const dispatch = useDispatch();
+  const isToken = useSelector(getToken);
+  const navigate = useNavigate();
+  const firstName = useSelector(getFirstName);
 
-  const handleAuthentication = (e) => {
+  /**
+   * When triggered, datas are removed from the store and user is redirected to the home page
+   * @param {event} e
+   */
+  const handleLogOut = (e) => {
     e.preventDefault();
     dispatch(logout());
     dispatch(resetInfos());
     navigate("/");
   };
 
+  /**
+   * Template to display when user is logged out
+   * @returns JSX Element for the navbar
+   */
   const templateSignOut = () => {
     return (
       <div>
@@ -24,7 +34,7 @@ export default function Navbar() {
           <i className="fa fa-user-circle"></i>
           {firstName}
         </Link>
-        <Link className="main-nav-item" onClick={handleAuthentication}>
+        <Link className="main-nav-item" onClick={handleLogOut}>
           <i className="fa fa-sign-out"></i>
           Sign out
         </Link>
@@ -32,6 +42,10 @@ export default function Navbar() {
     );
   };
 
+  /**
+   * Template to display when user is logged in
+   * @returns JSX Element for the navbar
+   */
   const templateSignIn = () => (
     <div>
       <Link className="main-nav-item" to={`/login`}>

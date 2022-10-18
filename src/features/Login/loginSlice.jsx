@@ -32,9 +32,6 @@ export const loginSlice = createSlice({
   },
 });
 
-export const getToken   = (state) => state.login.token;
-export const getStatus  = (state) => state.login.status;
-
 export const { login, logout } = loginSlice.actions;
 
 export default loginSlice.reducer;

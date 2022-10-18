@@ -5,13 +5,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetcherWithToken } from "../../services/fetcher";
-import {
-  getInfos,
-  getLastName,
-  getFirstName,
-  updateInfos,
-} from "../../features/User/userSlice";
-import { getToken } from "../../features/Login/loginSlice";
+import { getInfos, updateInfos } from "../../features/User/userSlice";
+import { getLastName, getFirstName } from "../../features/User/userSelector";
+import { getToken } from "../../features/Login/loginSelector";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
@@ -25,10 +21,15 @@ export default function Profile() {
   const lastName = useSelector(getLastName);
   const token = useSelector(getToken);
 
+  /**
+   * If the user is not logged in, then fetch the user's profile and dispatch the user's information to
+   * the redux store.
+   */
   const getProfile = async () => {
     if (isUser === "") {
       const response = await fetcherWithToken(
-        "http://localhost:3001/api/v1/user/profile","POST",
+        "http://localhost:3001/api/v1/user/profile",
+        "POST",
         {},
         token
       );
@@ -37,16 +38,28 @@ export default function Profile() {
     }
   };
 
+  /**
+   * Asynchronous function that takes in data as a parameter and dispatches the data to the
+   * reducer.
+   */
   const dispatchUserInfos = async (data) => {
     await dispatch(getInfos(data));
   };
 
+  /**
+   * When the toggleButton function is called, set the isEditing state to the opposite of what it
+   * currently is.
+   */
   const toggleButton = () => setIsEditing(!isEditing);
 
+  /**
+   * Template of button that is displayed when the user is editing his profile.
+   * @returns A React Fragment with a title, a form, and two buttons.
+   */
   const buttonOpen = () => {
     return (
       <React.Fragment>
-        <h1>Welcome back</h1>
+        <h1 className="alternateTitle">Welcome back</h1>
         <div className="edit-form">
           <div className="row">
             <input
@@ -63,14 +76,25 @@ export default function Profile() {
             />
           </div>
           <div className="row">
-            <button className="transaction-button-inverse" onClick={submitForm}>Save</button>
-            <button className="transaction-button-inverse" onClick={toggleButton}>Cancel</button>
+            <button className="transaction-button-inverse" onClick={submitForm}>
+              Save
+            </button>
+            <button
+              className="transaction-button-inverse"
+              onClick={toggleButton}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </React.Fragment>
     );
   };
 
+  /**
+   * Template of button that is displayed when the user is not editing his profile.
+   * @returns A React Fragment with a title, a form, and two buttons.
+   */
   const buttonClose = () => {
     return (
       <React.Fragment>
@@ -86,16 +110,27 @@ export default function Profile() {
     );
   };
 
+/**
+ * It takes the newFirstName and newLastName from the input fields, and sends them to the server, which
+ * updates the user's profile.
+ */
   const submitForm = async () => {
     if (newFirstName !== "" && newLastName !== "") {
       const response = await fetcherWithToken(
-        "http://localhost:3001/api/v1/user/profile","PUT",
-        {firstName: newFirstName, lastName: newLastName},
+        "http://localhost:3001/api/v1/user/profile",
+        "PUT",
+        { firstName: newFirstName, lastName: newLastName },
         token
       );
       const data = await response.json();
-      if(data.status === 200){
-        dispatch(updateInfos({firstName: data.body.firstName, lastName: data.body.lastName, updatedAt: data.body.updatedAt}));
+      if (data.status === 200) {
+        dispatch(
+          updateInfos({
+            firstName: data.body.firstName,
+            lastName: data.body.lastName,
+            updatedAt: data.body.updatedAt,
+          })
+        );
         toggleButton();
         setNewFirstName("");
         setNewLastName("");
@@ -112,9 +147,7 @@ export default function Profile() {
     <React.Fragment>
       <Navbar />
       <main className="main bg-dark">
-        <div className="header">
-          {isEditing ? buttonOpen() : buttonClose()}
-        </div>
+        <div className="header">{isEditing ? buttonOpen() : buttonClose()}</div>
         <h2 className="sr-only">Accounts</h2>
         <section className="account">
           <div className="account-content-wrapper">
