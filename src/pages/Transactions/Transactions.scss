@@ -1,0 +1,65 @@
+.headingAccount {
+  border        : 1px solid #a9aeb4;
+  line-height   : 2rem;
+  padding       : 1.5rem 0;
+  .accountName {
+    font-size: 1.5rem;
+  }
+  .amount {
+    font-size   : 2rem;
+    font-weight : 800;
+  }
+}
+.mainTransactionsContainer {
+  background-color    : #E0E6ED;
+  flex                : 1;
+  padding-top         : 5rem;
+  padding             : 0 10rem;
+  .dropDownContainer {
+    display           : flex;
+    flex-direction    : column;
+    justify-content   : center;
+    .dropDownTitles {
+      display           : flex;
+      justify-content   : space-between;
+      div {
+        flex: 1;
+      }
+      .emptyColumn {
+        flex: 0.25;
+      }
+    }
+    .dropDown {
+      &>.row {
+        align-items       : center;
+        justify-content   : space-between;
+        display           : flex;
+      }
+      &>.rowDescription {
+        text-align: start;
+        &>.dropDownInfosDetails {
+          flex: 1.55;
+          >div {
+            line-height: 2rem;
+            i {
+              margin-left: 0.5rem;
+            }
+          }
+        }
+      }
+      background-color    : #fff;
+      border              : 1px solid #a9aeb4;
+      font-weight         : 500;
+      padding             : 1rem 0;
+      div {
+        flex: 1;
+      }
+      i {
+        flex: 0.25;
+      }
+      .emptyColumn {
+        flex: 0.25;
+      }
+    }
+  }
+}
