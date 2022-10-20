@@ -5,45 +5,51 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetcherWithToken } from "../../services/fetcher";
-import { getInfos, updateInfos } from "../../features/User/userSlice";
-import { getLastName, getFirstName } from "../../features/User/userSelector";
+import {
+  getInfosFailed,
+  getInfosCompleted,
+  updateInfos,
+} from "../../features/User/userSlice";
+import {
+  getLastName,
+  getFirstName,
+  getStatus,
+} from "../../features/User/userSelector";
 import { getToken } from "../../features/Login/loginSelector";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
-  const [newFirstName, setNewFirstName] = useState("");
-  const [newLastName, setNewLastName] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const dispatch = useDispatch();
-  const isUser = useSelector(getFirstName);
-  const navigate = useNavigate();
-  const firstName = useSelector(getFirstName);
-  const lastName = useSelector(getLastName);
-  const token = useSelector(getToken);
+  const [newFirstName, setNewFirstName]   = useState("");
+  const [newLastName, setNewLastName]     = useState("");
+  const [isEditing, setIsEditing]         = useState(false);
+  const dispatch                          = useDispatch();
+  const navigate                          = useNavigate();
+  const firstName                         = useSelector(getFirstName);
+  const lastName                          = useSelector(getLastName);
+  const token                             = useSelector(getToken);
+  const status                            = useSelector(getStatus);
 
   /**
    * If the user is not logged in, then fetch the user's profile and dispatch the user's information to
    * the redux store.
    */
   const getProfile = async () => {
-    if (isUser === "") {
-      const response = await fetcherWithToken(
-        "http://localhost:3001/api/v1/user/profile",
-        "POST",
-        {},
-        token
-      );
-      const data = await response.json();
-      await dispatchUserInfos(data);
+    if(status === 'pending'){
+      try {
+        const response = await fetcherWithToken(
+          "http://localhost:3001/api/v1/user/profile",
+          "POST",
+          {},
+          token
+        );
+        const data = await response.json();
+        await dispatch(getInfosCompleted(data));
+      } catch (err) {
+        console.error(err.message);
+        dispatch(getInfosFailed(err.message));
+        navigate("/Error");
+      }
     }
-  };
-
-  /**
-   * Asynchronous function that takes in data as a parameter and dispatches the data to the
-   * reducer.
-   */
-  const dispatchUserInfos = async (data) => {
-    await dispatch(getInfos(data));
   };
 
   /**
@@ -116,31 +122,35 @@ export default function Profile() {
  */
   const submitForm = async () => {
     if (newFirstName !== "" && newLastName !== "") {
-      const response = await fetcherWithToken(
-        "http://localhost:3001/api/v1/user/profile",
-        "PUT",
-        { firstName: newFirstName, lastName: newLastName },
-        token
-      );
-      const data = await response.json();
-      if (data.status === 200) {
-        dispatch(
-          updateInfos({
-            firstName: data.body.firstName,
-            lastName: data.body.lastName,
-            updatedAt: data.body.updatedAt,
-          })
+      try {
+        const response = await fetcherWithToken(
+          "http://localhost:3001/api/v1/user/profile",
+          "PUT",
+          { firstName: newFirstName, lastName: newLastName },
+          token
         );
-        toggleButton();
-        setNewFirstName("");
-        setNewLastName("");
+        const data = await response.json();
+        if (data.status === 200) {
+          dispatch(
+            updateInfos({
+              firstName   : data.body.firstName,
+              lastName    : data.body.lastName,
+              updatedAt   : data.body.updatedAt,
+            })
+          );
+          toggleButton();
+          setNewFirstName("");
+          setNewLastName("");
+        }
+      } catch (err) {
+        console.error(err.message);
       }
     }
   };
 
   useEffect(() => {
     if (token === null) navigate("/login");
-    if (token !== null && isUser === "") getProfile();
+    if(status === 'pending') getProfile();
   });
 
   return (

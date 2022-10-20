@@ -6,6 +6,7 @@ const initialState = {
   firstName   : "",
   id          : "",
   lastName    : "",
+  status      : null,
   updatedAt   : "",
 };
 
@@ -13,7 +14,26 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    getInfos: {
+    
+    getInfosPending: {
+      reducer: (draft) => {
+        draft.createdAt   = "";
+        draft.email       = "";
+        draft.firstName   = "";
+        draft.id          = "";
+        draft.lastName    = "";
+        draft.status      = "pending";
+        draft.updatedAt   = "";
+      },
+    },
+
+    getInfosFailed: {
+      reducer: (draft) => {
+        draft.status = 400;
+      },
+    },
+
+    getInfosCompleted: {
       prepare: (data) => ({
         payload: { data },
       }),
@@ -23,9 +43,11 @@ export const userSlice = createSlice({
         draft.firstName   = action.payload.data.body.firstName;
         draft.id          = action.payload.data.body.id;
         draft.lastName    = action.payload.data.body.lastName;
+        draft.status      = action.payload.data.status;
         draft.updatedAt   = action.payload.data.body.updatedAt;
       },
     },
+
     updateInfos: {
       prepare: (data) => ({
         payload: { data },
@@ -36,6 +58,7 @@ export const userSlice = createSlice({
         draft.updatedAt   = action.payload.data.updatedAt;
       },
     },
+
     resetInfos: {
       reducer: (draft) => {
         draft.createdAt   = "";
@@ -43,12 +66,13 @@ export const userSlice = createSlice({
         draft.firstName   = "";
         draft.id          = "";
         draft.lastName    = "";
+        draft.status      = null;
         draft.updatedAt   = "";
       },
     },
   },
 });
 
-export const { getInfos, resetInfos, updateInfos } = userSlice.actions;
+export const { getInfosPending, getInfosFailed, getInfosCompleted, resetInfos, updateInfos } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,21 +1,21 @@
 .errorContainer {
-  flex: 1 1 auto;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items       : center;
+  color             : #fff;
+  display           : flex;
+  flex-direction    : column;
+  flex              : 1 1 auto;
+  justify-content   : center;
   .error-title {
-    font-size: 8rem;
-    font-weight: bold;
-    margin: 0;
+    font-size   : 8rem;
+    font-weight : bold;
+    margin      : 0;
   }
   .error-text {
     font-size: 1.5rem;
   }
   .error-link {
-    color: #e5e5e5;
-    text-decoration: none;
+    color             : #e5e5e5;
+    text-decoration   : none;
     &:hover {
       text-decoration: underline;
     }

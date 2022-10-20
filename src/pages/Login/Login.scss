@@ -5,15 +5,15 @@
   position: relative;
 }
 .errorMessage {
-  color: red;
-  position: absolute;
-  bottom: 0.5rem;
-  left: 30%;
+  bottom    : 0.5rem;
+  color     : red;
+  left      : 30%;
+  position  : absolute;
 }
 
 .sign-in-button:hover {
-  background-color: #fff;
-  border-color: #00bc77;
-  color: #00bc77;
-  transition: all 0.2s ease-in-out;
+  background-color    : #fff;
+  border-color        : #00bc77;
+  color               : #00bc77;
+  transition          : all 0.2s ease-in-out;
 }

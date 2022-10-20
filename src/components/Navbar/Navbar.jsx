@@ -7,10 +7,10 @@ import { resetInfos } from "../../features/User/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function Navbar() {
-  const dispatch = useDispatch();
-  const isToken = useSelector(getToken);
-  const navigate = useNavigate();
-  const firstName = useSelector(getFirstName);
+  const dispatch    = useDispatch();
+  const firstName   = useSelector(getFirstName);
+  const isToken     = useSelector(getToken);
+  const navigate    = useNavigate();
 
   /**
    * When triggered, datas are removed from the store and user is redirected to the home page

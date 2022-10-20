@@ -3,8 +3,10 @@ import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import React, { useEffect, useState } from "react";
 import { fetcherPost } from "../../services/fetcher";
-import { login } from "../../features/Login/loginSlice";
-import { useDispatch } from "react-redux";
+import { loginPending, loginFailed, loginCompleted } from "../../features/Login/loginSlice";
+import { getInfosPending } from "../../features/User/userSlice";
+import { getErrorMsg } from "../../features/Login/loginSelector";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -13,7 +15,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [errorMsg, setErrorMsg] = useState("");
+  const errorMsg = useSelector(getErrorMsg);
 
   /**
    * If the username is saved in localStorage, then set the password and username to the saved values and
@@ -41,6 +43,7 @@ export default function Login() {
       localStorage.setItem("username", username);
       localStorage.setItem("password", password);
     }
+    dispatch(loginPending());
     try {
       const response = await fetcherPost(
         "http://localhost:3001/api/v1/user/login",
@@ -48,10 +51,11 @@ export default function Login() {
       );
       const data = await response.json();
       if (data.status === 400) {
-        const [error, message] = data.message.split(":");
-        setErrorMsg(message);
+        const message = data.message.split(":")[1];
+        dispatch(loginFailed(message));
       } else {
-        dispatch(login(data));
+        dispatch(loginCompleted(data));
+        dispatch(getInfosPending());
         navigate("/profile");
       }
     } catch (err) {

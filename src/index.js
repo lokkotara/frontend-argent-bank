@@ -18,7 +18,6 @@ const root        = createRoot(container);
 let persistor     = persistStore(store);
 
 root.render(
-  <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router>
@@ -33,7 +32,6 @@ root.render(
         </Router>
       </PersistGate>
     </Provider>
-  </React.StrictMode>
 );
 
 reportWebVitals();

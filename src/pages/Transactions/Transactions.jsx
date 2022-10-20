@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function Transactions() {
-  const token = useSelector(getToken);
-  const navigate = useNavigate();
+  const token       = useSelector(getToken);
+  const navigate    = useNavigate();
 
   useEffect(() => {
     if (token === null) navigate("/login");
