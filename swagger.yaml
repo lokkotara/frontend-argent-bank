@@ -209,7 +209,7 @@ paths:
             required: true
           - in: body
             name: body
-            description: add a type, a category or a note to a specific transaction
+            description: add a category or a note to a specific transaction
             schema:
               $ref: "#/definitions/ModifiableTransaction"
         produces:
@@ -291,11 +291,11 @@ paths:
           - application/json
         responses:
           "200":
-            description: User profile retrieved successully
+            description: Infos successfully deleted
             schema:
-              $ref: "#/definitions/ApiResponse"
+              $ref: "#/definitions/ApiResponseDefault"
           "400":
-            description: Invalid Fields
+            description: Invalid infos to delete
           "500":
             description: Internal Server Error
 securityDefinitions:
