@@ -1,4 +1,4 @@
-# <div style="text-align: center;">![](.\public\img\argentBankLogo.png)</div>
+# <div style="text-align: center;">![](public/img/argentBankLogo.png)</div>
 ## Prerequisites
 The frontend part of the app uses :
 - Node.js v14
