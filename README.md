@@ -18,7 +18,7 @@ This will install the dependencies needed for the app to work.
 Once all the dependencies are installed, you are now ready to launch the application.
 
 ## Launch the application
-Before launching the frontend part of the application, please make sure that the instructions [this repo](https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API) concerning the back and the database have been completed.
+Before launching the frontend part of the application, please make sure that the instructions in [this repo](https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API) concerning the back and the database have been completed.
 
 Then just type the ```npm start``` command in the terminal and wait to be redirected. 
 
